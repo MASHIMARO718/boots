@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.boots.mapper.StudentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.boots.entity.Student">
+            <result column="id" property="id" />
+                <result column="userID" property="userID" jdbcType="VARCHAR"/>
+                <result column="userName" property="userName" jdbcType="VARCHAR"/>
+                <result column="sex" property="sex" jdbcType="VARCHAR"/>
+                <result column="birthYear" property="birthYear" jdbcType="VARCHAR"/>
+                <result column="grade" property="grade" jdbcType="VARCHAR"/>
+                <result column="collegeID" property="collegeID" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+            userID,
+            userName,
+            sex,
+            birthYear,
+            grade,
+            collegeID
+    </sql>
+    <!-- whereSql-->
+    <sql id="whereSql">
+            <if test="userID != null and userID != '' ">
+                AND t.userID = #{userID}
+            </if>
+            <if test="userName != null and userName != '' ">
+                AND t.userName = #{userName}
+            </if>
+            <if test="sex != null and sex != '' ">
+                AND t.sex = #{sex}
+            </if>
+            <if test="birthYear != null and birthYear != '' ">
+                AND t.birthYear = #{birthYear}
+            </if>
+            <if test="grade != null and grade != '' ">
+                AND t.grade = #{grade}
+            </if>
+            <if test="collegeID != null and collegeID != '' ">
+                AND t.collegeID = #{collegeID}
+            </if>
+    </sql>
+
+    <!-- 通用查询-->
+    <select id="selectStudentList" parameterType="com.example.boots.entity.Student" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+         FROM student t
+        <where>
+            1 = 1
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+    <!-- 通用查询-->
+    <select id="count" parameterType="com.example.boots.entity.Student" resultType="Integer">
+        SELECT count(1) 
+        FROM student t
+        <where>
+            1 = 1
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+    <!-- 新增或更新-->
+    <insert id="addOrUpdate" parameterType="com.example.boots.entity.Student">
+        insert into  student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="userID != null">
+                    userID,
+                </if>
+                <if test="userName != null">
+                    userName,
+                </if>
+                <if test="sex != null">
+                    sex,
+                </if>
+                <if test="birthYear != null">
+                    birthYear,
+                </if>
+                <if test="grade != null">
+                    grade,
+                </if>
+                <if test="collegeID != null">
+                    collegeID,
+                </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="userID != null">
+                    #{userID},
+                </if>
+                <if test="userName != null">
+                    #{userName},
+                </if>
+                <if test="sex != null">
+                    #{sex},
+                </if>
+                <if test="birthYear != null">
+                    #{birthYear},
+                </if>
+                <if test="grade != null">
+                    #{grade},
+                </if>
+                <if test="collegeID != null">
+                    #{collegeID},
+                </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+                <if test="userID != null">
+                    userID = #{userID},
+                </if>
+                <if test="userName != null">
+                    userName = #{userName},
+                </if>
+                <if test="sex != null">
+                    sex = #{sex},
+                </if>
+                <if test="birthYear != null">
+                    birthYear = #{birthYear},
+                </if>
+                <if test="grade != null">
+                    grade = #{grade},
+                </if>
+                <if test="collegeID != null">
+                    collegeID = #{collegeID},
+                </if>
+        </trim>
+    </insert>
+
+    <!-- 批量新增或更新-->
+    <insert id="batchAddOrUpdate" parameterType="java.util.List">
+        insert into  student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                    userID,
+                    userName,
+                    sex,
+                    birthYear,
+                    grade,
+                    collegeID,
+        </trim>
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                    #{userID},
+                    #{userName},
+                    #{sex},
+                    #{birthYear},
+                    #{grade},
+                    #{collegeID}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+            userID = VALUES(userID),
+            userName = VALUES(userName),
+            sex = VALUES(sex),
+            birthYear = VALUES(birthYear),
+            grade = VALUES(grade),
+            collegeID = VALUES(collegeID)
+    </insert>
+    <!-- 根据主键id更新-->
+    <update id="updateByPrimaryKey" parameterType="com.example.boots.entity.Student">
+        update student
+        <set>
+                <if test="userID != null">
+                    userID = #{userID},
+                </if>
+                <if test="userName != null">
+                    userName = #{userName},
+                </if>
+                <if test="sex != null">
+                    sex = #{sex},
+                </if>
+                <if test="birthYear != null">
+                    birthYear = #{birthYear},
+                </if>
+                <if test="grade != null">
+                    grade = #{grade},
+                </if>
+                <if test="collegeID != null">
+                    collegeID = #{collegeID}
+                </if>
+        </set>
+        where id =  #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
