@@ -18,8 +18,8 @@ public class Student implements Serializable{
     /**
     * 
     */
-    @TableField(value = "userID")
-    private Integer userID;
+    @TableField(value = "id")
+    private Integer id;
     /**
     * 
     */

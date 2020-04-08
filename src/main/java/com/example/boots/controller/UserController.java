@@ -4,7 +4,7 @@ import com.example.boots.entity.Student;
 import com.example.boots.mapper.StudentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,15 +17,21 @@ import java.util.List;
  * @version 1.0.0
  */
 @Controller
-@RequestMapping("/boots/")
+@RequestMapping(value = "/user/")
 public class UserController {
 
     @Autowired
     private StudentMapper studentMapper;
 
-    @RequestMapping("hello")
-    public void test(){
-        List<Student> userList = studentMapper.selectList(null);
-        System.out.println(userList);
+    @GetMapping("/hello1")
+    @ResponseBody
+    public List<Student> test(){
+        List<Student> userList;
+        userList = studentMapper.selectList(null);
+        return userList;
+    }
+    @RequestMapping(value = "hello2")
+    public String test2(){
+        return "user/css3.html";
     }
 }
